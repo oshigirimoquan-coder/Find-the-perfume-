@@ -4,214 +4,202 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>聞路香水嚮導</title>
+<title>Find the Perfume</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:wght@400;600;900&display=swap">
 <style>
-/* Layout: a single column of "blotter strips" — every perfume is a test strip, every family has its own ink. */
+/* Layout: a broadsheet. Masthead and double-ruled section rail, then each view laid out like a newspaper page: lead story, ruled listings, column rules. One serif, one ink on blue-grey paper. */
 :root{
-  --paper:#F1F0F4; --card:#FBFAFC; --ink:#1E1B24; --muted:#67616F; --line:#DAD6E0;
-  --accent:#5A2B4F; --accent-soft:#EBDDE7; --gold:#9A6B22;
-  --display:"Noto Serif TC","Songti TC","PMingLiU",serif;
-  --body:-apple-system,"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
-  --mono:"DM Mono",ui-monospace,Menlo,monospace;
-  --cit:#C9930E; --grn:#4F7A3A; --aqu:#2F7A9A; --flo:#C2557A; --wht:#A88A5C; --fru:#D0603A;
-  --gou:#8A5A34; --wod:#6E5236; --amb:#B5651D; --smk:#5D5868; --lea:#5A3A2E; --msk:#9C8FA8; --aro:#5B7F72; --pow:#9A86B8;
+  --paper:#D5DEE6; --ink:#101823; --gray:#475465; --rule:#101823; --hair:#B3C0CC; --tint:#C9D4DE;
+  --serif:"Chiron Sung HK","Chiron Sung HK WS","Songti TC","PMingLiU",serif;
+  --display:var(--serif); --body:var(--serif); --mono:var(--serif);
+  --cit:var(--ink);--grn:var(--ink);--aqu:var(--ink);--flo:var(--ink);--wht:var(--ink);--fru:var(--ink);--gou:var(--ink);--wod:var(--ink);--amb:var(--ink);--smk:var(--ink);--lea:var(--ink);--msk:var(--ink);--aro:var(--ink);--pow:var(--ink);
+  --accent:var(--ink); --accent-soft:var(--tint); --gold:var(--gray); --line:var(--hair); --card:var(--paper); --muted:var(--gray);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#15131A; --card:#1F1C25; --ink:#ECE8F1; --muted:#A49DAE; --line:#34303D;
-  --accent:#E0A9CF; --accent-soft:#3A2636; --gold:#D9AC5E;
-  --cit:#E8B53A; --grn:#86B56C; --aqu:#5FB3D6; --flo:#E8869F; --wht:#D2B98C; --fru:#EE8A63;
-  --gou:#C8946A; --wod:#B8916A; --amb:#E39A55; --smk:#A9A3B6; --lea:#C08870; --msk:#C3B7CF; --aro:#8DBFAE; --pow:#BEAEDB;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --paper:#15131A; --card:#1F1C25; --ink:#ECE8F1; --muted:#A49DAE; --line:#34303D;
-  --accent:#E0A9CF; --accent-soft:#3A2636; --gold:#D9AC5E;
-  --cit:#E8B53A; --grn:#86B56C; --aqu:#5FB3D6; --flo:#E8869F; --wht:#D2B98C; --fru:#EE8A63;
-  --gou:#C8946A; --wod:#B8916A; --amb:#E39A55; --smk:#A9A3B6; --lea:#C08870; --msk:#C3B7CF; --aro:#8DBFAE; --pow:#BEAEDB;
-  color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{overflow-x:clip}
-body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
-.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.25}
+a{color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--serif);margin:0;line-height:1.25;text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.label{font-size:12px;color:var(--muted)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.label{font-size:13px;color:var(--gray)}
 
-/* hero */
-header.hero{padding-block:36px 20px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
-.hero h1{padding-right:72px;font-size:clamp(30px,6vw,52px);font-weight:900;letter-spacing:-.01em}
-.hero p{max-width:34em;color:var(--muted);margin:12px 0 0}
-.strips{display:flex;gap:7px;align-items:flex-end;height:120px}
-.strips i{display:block;width:16px;background:var(--card);border:1px solid var(--line);clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%);position:relative;transform-origin:bottom center}
-.strips i::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:38%;background:var(--c);opacity:.55}
-@media (max-width:560px){.strips{display:none}header.hero{grid-template-columns:1fr}}
-
-/* nav */
-nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
-nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-nav.tabs .wrap::-webkit-scrollbar{display:none}
-nav.tabs a{flex:none;padding:12px 12px 11px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:2px solid transparent;white-space:nowrap}
-nav.tabs a[aria-current="page"]{color:var(--ink);border-color:var(--accent)}
+/* masthead */
+.topbar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:13px;color:var(--gray);padding-block:14px 0}
+.langbtn{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:13px}
+.mast{text-align:center;padding-block:6px 14px}
+.mast h1{font-weight:900;font-size:clamp(44px,9vw,96px);line-height:1;letter-spacing:-.01em}
+.mast p{margin:8px 0 0;font-size:14px;color:var(--gray)}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper)}
+.rail{border-top:3px double var(--rule);border-bottom:1px solid var(--rule);display:flex;justify-content:center;gap:4px 28px;padding-block:9px;font-size:15px}
+.rail a{text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;transition:border-color .15s ease;white-space:nowrap}
+.rail a:hover,.rail a[aria-current="page"]{border-bottom-color:var(--ink)}
 main{padding-block:28px 64px}
-section[data-view]{display:grid;gap:22px}
-.intro{max-width:40em;color:var(--muted);margin:0}
-h2{font-size:clamp(22px,4vw,30px)}
+section[data-view]{display:grid;gap:24px}
+h2{font-weight:900;font-size:clamp(28px,4.4vw,44px)}
+.intro{max-width:36em;color:var(--gray);margin:10px 0 0;font-size:17px}
+.mark{position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));font-size:11px;font-style:italic;color:var(--gray);opacity:.35;pointer-events:none;user-select:none;z-index:1}
+
+/* lead story on the quiz page */
+.lead-story{border-bottom:1px solid var(--rule);padding-bottom:22px}
+.lead-story h2{font-size:clamp(34px,5.4vw,60px);line-height:1.12}
+.deck{margin:14px 0 0;font-size:clamp(17px,2vw,20px);line-height:1.6;color:var(--gray);max-width:32em}
 
 /* quiz */
-.qbox{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px clamp(16px,4vw,32px);display:grid;gap:18px}
-.progress{display:flex;gap:4px}
-.progress span{flex:1;height:3px;background:var(--line);border-radius:2px}
-.progress span.on{background:var(--accent)}
-.qtitle{font-family:var(--display);font-size:clamp(20px,3.6vw,26px);font-weight:700}
-.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.opt{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:2px;transition:border-color .15s,background .15s}
-.opt:hover{border-color:var(--accent)}
-.opt b{font-weight:600}
-.opt small{color:var(--muted);font-size:13px}
-.qnav{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.ghost{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;color:var(--muted)}
-.ghost:disabled{opacity:.4;cursor:default}
-.primary{background:var(--accent);color:var(--card);border:0;border-radius:999px;padding:9px 18px;font-weight:600}
+.qbox{display:grid;gap:16px}
+.progress{display:flex;gap:3px}
+.progress span{flex:1;height:2px;background:var(--hair)}
+.progress span.on{background:var(--ink)}
+.qtitle{font-weight:900;font-size:clamp(24px,3.6vw,36px);line-height:1.25;text-wrap:balance}
+.qhint{margin:-6px 0 0;color:var(--gray);font-size:15px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;border-top:1px solid var(--rule)}
+.opt{display:flex;justify-content:space-between;align-items:baseline;gap:12px;text-align:left;background:none;border:0;border-bottom:1px solid var(--hair);padding:12px 0;min-width:0;transition:padding-left .18s ease}
+.opt:hover{padding-left:8px}
+.opt b{font-weight:400;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.opt small{font-size:13px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.opt[aria-pressed="true"] b{font-weight:900}
+.opt[aria-pressed="true"] b::before{content:"✓ "}
+.qnav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:4px}
+.qnav-r,.qnav-l{display:flex;gap:14px;align-items:center}
+.ghost{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:15px}
+.ghost:disabled{opacity:.35;cursor:default}
+.ghost.sm{font-size:14px}
+.ghost[aria-pressed="true"]{font-weight:900;text-decoration-thickness:2px}
+.primary{background:var(--ink);color:var(--paper);border:0;padding:10px 22px;font-size:16px;transition:opacity .15s ease}
+.primary:hover{opacity:.85}
+.asearch{display:grid;gap:6px}
+input[type=search],select{font:inherit;font-size:16px;background:transparent;color:var(--ink);border:0;border-bottom:1px solid var(--rule);border-radius:0;padding:8px 0}
+input[type=search]{width:100%}
+.alist{display:grid}
+.arow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--hair);font-size:15px}
+.arow > span:last-child{display:flex;gap:14px}
+.achips{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+.achip{display:inline-flex;align-items:baseline;gap:6px}
+.achip.dislike{color:var(--gray);text-decoration:line-through;text-decoration-color:var(--gray)}
+.achip button{background:none;border:0;padding:0 2px;color:var(--gray)}
 
 /* results */
-.result{display:grid;gap:26px}
-.profile{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px clamp(16px,4vw,32px)}
-@media (max-width:720px){.profile{grid-template-columns:1fr}}
-.profile h3{font-size:clamp(24px,4.5vw,34px);font-weight:900}
-.profile p{margin:8px 0 0;color:var(--muted)}
-.bars{display:grid;gap:8px;align-content:start}
-.bar{display:grid;grid-template-columns:5.5em minmax(0,1fr) 2.5em;gap:10px;align-items:center;font-size:13px}
-.bar .track{height:8px;background:var(--paper);border-radius:4px;overflow:hidden}
-.bar .fill{height:100%;background:var(--c);border-radius:4px}
-.bar .n{font-family:var(--mono);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
-.avoid{font-size:13px;color:var(--muted);margin-top:6px}
-.subhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-.subhead h3{font-size:20px}
+.result{display:grid;gap:28px;border-top:3px double var(--rule);padding-top:24px}
+.profile{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:0}
+.profile > div:first-child{padding-right:28px;border-right:1px solid var(--hair)}
+.profile > .bars{padding-left:28px}
+.profile h3{font-weight:900;font-size:clamp(26px,4vw,40px);line-height:1.2}
+.profile p{margin:10px 0 0;color:var(--gray)}
+.profile p b{color:var(--ink)}
+.avoid{font-size:14px}
+.bars{display:grid;gap:10px;align-content:start}
+.bar{display:grid;grid-template-columns:6em minmax(0,1fr) 2.5em;gap:10px;align-items:center;font-size:14px}
+.bar .track{height:6px;background:var(--hair)}
+.bar .fill{height:100%;background:var(--ink)}
+.bar .n{color:var(--gray);text-align:right}
+.note-box{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:14px;font-size:15px}
+.note-box .ok{font-weight:900}
+.subhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--rule);padding-bottom:6px}
+.subhead h3{font-weight:900;font-size:22px}
+.count{font-size:13px;color:var(--gray)}
+.empty{color:var(--gray);padding:20px 0}
 
-/* perfume strip cards */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.strip{background:var(--card);border:1px solid var(--line);border-radius:4px 4px 0 0;padding:14px 14px 30px;display:grid;gap:8px;align-content:start;clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),50% 100%,0 calc(100% - 14px));min-width:0}
-.strip{position:relative;transition:transform .18s ease,border-color .18s ease}
-.strip:hover{transform:translateY(-3px);border-color:var(--accent)}
+/* listings */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:28px}
 @media (min-width:760px){.grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.strip .rank{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.strip.top{border-color:var(--accent);background:var(--accent-soft)}
-.strip.top .rank{color:var(--accent);font-weight:500}
-.opt{transition:border-color .15s,background .15s,transform .1s}
-.opt:active{transform:scale(.98)}
-@keyframes dip{0%{transform:translateY(-26px) rotate(var(--r))}55%{transform:translateY(6px) rotate(var(--r))}100%{transform:translateY(0) rotate(var(--r))}}
-.strips i{animation:dip .9s cubic-bezier(.3,.7,.3,1) both;animation-delay:calc(var(--d) * 90ms)}
-.strip .brand{font-size:13px;color:var(--muted)}
-.strip h4{margin:0;font-family:var(--display);font-size:18px;font-weight:700;line-height:1.25}
-.strip .by{font-size:13px;color:var(--muted)}
+.strip{position:relative;display:grid;gap:6px;align-content:start;padding-block:14px 22px;border-bottom:1px solid var(--hair);min-width:0}
+.strip .rank{position:absolute;top:14px;right:0;font-weight:900;font-size:22px;line-height:1}
+.strip.top{border-top:3px double var(--rule)}
+.strip.top .rank{font-size:14px}
+.strip .brand{font-size:14px;color:var(--gray);padding-right:2.4em}
+.strip h4{font-weight:900;font-size:21px;line-height:1.3;padding-right:1.6em;transition:opacity .15s ease}
+.strip:hover h4{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.nick{font-size:14px;margin-top:-4px}
+.ink{display:none}
+.fam{font-size:13px;color:var(--gray)}
+.fam + .fam::before{content:"、";margin-left:-4px}
+.strip .notes{font-size:14px}
+.strip .by{font-size:13px;color:var(--gray)}
 .strip .by b{color:var(--ink);font-weight:600}
-.strip .notes{font-size:13px}
-.ink{height:6px;display:flex;border-radius:3px;overflow:hidden}
-.ink span{background:var(--c)}
-.meta{display:flex;gap:6px;flex-wrap:wrap;font-size:12px}
-.pill{border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--muted);white-space:nowrap}
-.pill.t-n{border-color:var(--accent);color:var(--accent)}
-.pill.t-i{border-color:var(--gold);color:var(--gold)}
-.why{font-size:12px;color:var(--accent)}
-.fam{display:inline-flex;align-items:center;gap:5px;font-size:12px}
-.fam::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+.meta{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12px;color:var(--gray)}
+.pill{white-space:nowrap}
+.pill.t-n,.pill.t-i{color:var(--ink)}
+.pill.disc{color:var(--ink);font-weight:900}
+.why{font-size:13px;font-style:italic}
+.buy{display:grid;gap:2px;font-size:12px;padding-top:6px;border-top:1px dotted var(--hair)}
+.buy .ch{color:var(--gray)}
+.buy .lk{display:flex;flex-wrap:wrap;gap:2px 12px}
+.buy a{text-decoration:underline;text-underline-offset:2px}
+.rate{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:13px}
+.more{justify-self:center}
 
-/* perfumers */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.pcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
-.pcard h4{margin:0;font-family:var(--display);font-size:18px}
-.pcard p{margin:0;font-size:14px;color:var(--muted)}
-.pcard .works{font-size:13px}
-.pcard .works span{display:inline-block;margin-right:10px}
-
-/* chips & filters */
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 13px;font-size:14px}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
-.chip .fam{pointer-events:none}
-.filters{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px}
-.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.frow > .label{width:4.5em}
-input[type=search],select{font:inherit;font-size:16px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
-input[type=search]{flex:1;min-width:0}
-.count{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.empty{color:var(--muted);padding:20px 0}
-.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.qhint{margin:-8px 0 0;color:var(--muted);font-size:14px}
-.qnav-r,.qnav-l{display:flex;gap:10px;align-items:center}
-.asearch{display:grid;gap:8px}
-.asearch input{width:100%}
-.alist{display:grid;gap:6px}
-.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;background:var(--paper);border:1px solid var(--line);border-radius:6px;font-size:14px}
-.arow > span:last-child{display:flex;gap:6px}
-.ghost.sm{padding:3px 10px;font-size:13px}
-.ghost[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
-.achips{display:flex;flex-wrap:wrap;gap:6px}
-.achip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;border:1px solid var(--line)}
-.achip.like{border-color:var(--grn);color:var(--grn)}
-.achip.dislike{border-color:var(--fru);color:var(--fru)}
-.achip button{background:none;border:0;padding:0 6px;font-size:15px;color:inherit}
-.note-box{background:var(--accent-soft);border-radius:6px;padding:14px 16px;font-size:14px}
-.note-box .ok{color:var(--accent);font-weight:600}
-.rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.nick{font-size:13px;color:var(--accent);margin-top:-4px}
-.buy{display:grid;gap:4px;border-top:1px dashed var(--line);padding-top:8px;font-size:12px}
-.buy .ch{color:var(--muted)}
-.buy .lk{display:flex;flex-wrap:wrap;gap:4px 10px}
-.buy a{color:var(--accent);text-decoration:none;font-weight:600}
-.buy a:hover{text-decoration:underline}
-.more{justify-self:center;padding:9px 20px}
-.pill.disc{border-color:var(--fru);color:var(--fru)}
-html[lang="en"] [data-l="zh"],html:not([lang="en"]) [data-l="en"]{display:none!important}
-header.hero{position:relative}
-.langbtn{position:absolute;top:12px;right:0;z-index:2;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-family:var(--mono);font-size:12px;color:var(--ink)}
-.status{font-family:var(--mono);font-size:12px;color:var(--gold)}
-select{font-size:14px;padding:4px 8px}
-
-/* notes */
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-.fcard{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:6px;align-content:start}
-.fcard h4{margin:0;font-family:var(--display);font-size:19px;display:flex;align-items:center;gap:8px}
-.fcard h4::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c)}
-.fcard p{margin:0;font-size:14px}
-.fcard .ex{font-size:13px;color:var(--muted)}
-.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
-.basics h3{font-size:18px;margin-bottom:8px}
-.basics ol,.basics ul{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:14px}
+/* perfumers, notes */
+.pgrid,.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));column-gap:28px}
+.pcard,.fcard{display:grid;gap:6px;align-content:start;padding-block:14px 20px;border-bottom:1px solid var(--hair);min-width:0}
+.pcard h4,.fcard h4{font-weight:900;font-size:20px}
+.pcard p,.fcard p{margin:0;font-size:15px}
+.pcard > p{color:var(--gray)}
+.pcard .works{font-size:14px}
+.fcard .ex{font-size:14px;color:var(--gray)}
+.fcard h4::before{display:none}
+.basics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:3px double var(--rule);padding-top:20px}
+.basics > div{padding-inline:24px;border-left:1px solid var(--hair);min-width:0}
+.basics > div:first-child{padding-left:0;border-left:0}
+.basics h3{font-weight:900;font-size:20px;margin-bottom:8px}
+.basics ol,.basics ul{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:15px}
 table.conc{width:100%;border-collapse:collapse;font-size:14px}
-table.conc td,table.conc th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
-table.conc td:nth-child(2){font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.conc td,table.conc th{padding:6px 8px 6px 0;border-bottom:1px solid var(--hair);text-align:left}
+table.conc th{border-bottom-color:var(--rule);font-weight:600}
 .tablewrap{overflow-x:auto}
-footer{color:var(--muted);font-size:13px;padding-block:0 40px}
+
+/* library filters */
+.filters{display:grid;gap:10px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:14px}
+.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.frow > .label{width:5em;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:4px 16px}
+.chip{background:none;border:0;padding:2px 0;font-size:15px;border-bottom:1px solid transparent;transition:border-color .15s ease}
+.chip:hover{border-bottom-color:var(--hair)}
+.chip[aria-pressed="true"]{font-weight:900;border-bottom-color:var(--ink)}
+.status{font-size:13px;color:var(--gray);font-style:italic}
+select{font-size:14px;padding:2px 0}
+footer{color:var(--gray);font-size:13px;padding-block:20px 48px;border-top:1px solid var(--rule)}
+html[lang="en"] [data-l="zh"],html:not([lang="en"]) [data-l="en"]{display:none!important}
+
+@media (max-width:760px){
+  .rail{justify-content:flex-start;overflow-x:auto;scrollbar-width:none;gap:22px}
+  .rail::-webkit-scrollbar{display:none}
+  .rail a{flex:none}
+  .opts{grid-template-columns:1fr}
+  .opt b{font-size:17px}
+  .profile{grid-template-columns:1fr}
+  .profile > div:first-child{padding-right:0;border-right:0}
+  .profile > .bars{padding-left:0;margin-top:20px}
+  .basics{grid-template-columns:1fr}
+  .basics > div{padding-inline:0;border-left:0;border-top:1px solid var(--hair);padding-top:16px;margin-top:16px}
+  .basics > div:first-child{border-top:0;margin-top:0;padding-top:0}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head><body>
 
 <div class="wrap">
-<header class="hero">
-  <button class="langbtn" id="langBtn" type="button">EN</button>
-  <div>
-    <h1><span data-l="zh">不懂香水，<br>也能找到你的味道</span><span data-l="en">No perfume know-how?<br>Find your scent anyway</span></h1>
-    <p><span data-l="zh">先挑幾支你聞過的香水，再回答 10 個可複選的問題，看你偏向哪種香調、哪些調香師的風格和你合拍，再從大牌到小眾獨立品牌裡挑出值得先去試的幾支。</span><span data-l="en">Start with a few perfumes you have smelled, answer 10 multiple-choice questions, and see which scent families and perfumers suit you — then get a short list worth sampling, from big designer houses to small indie brands.</span></p>
-  </div>
-  <div class="strips" aria-hidden="true" id="strips"></div>
-</header>
+  <div class="topbar"><span id="today"></span><button class="langbtn" id="langBtn" type="button">English</button></div>
+  <header class="mast"><h1>Find the Perfume</h1><p><span data-l="zh">給香水新手的選香指南，收錄一萬支香水</span><span data-l="en">A beginner's guide to choosing perfume, 10,000 scents indexed</span></p></header>
 </div>
-
-<nav class="tabs" aria-label="主要導航"><div class="wrap">
+<div id="strips" hidden></div>
+<nav class="tabs" aria-label="主要導航"><div class="wrap"><div class="rail">
   <a href="#quiz"><span data-l="zh">找我的香調</span><span data-l="en">Find my scent</span></a>
   <a href="#mood"><span data-l="zh">用感覺找</span><span data-l="en">By mood</span></a>
   <a href="#library"><span data-l="zh">香水庫</span><span data-l="en">Library</span></a>
   <a href="#perfumers"><span data-l="zh">調香師</span><span data-l="en">Perfumers</span></a>
   <a href="#notes"><span data-l="zh">香調入門</span><span data-l="en">Scent basics</span></a>
-</div></nav>
+</div></div></nav>
 
 <main class="wrap">
   <section data-view="quiz" id="v-quiz">
+    <div class="lead-story"><h2><span data-l="zh">不懂香水，<br>也能找到你的味道</span><span data-l="en">No perfume know-how?<br>Find your scent anyway</span></h2>
+    <p class="deck"><span data-l="zh">先挑幾支你聞過的香水，再回答十個問題。我們從一萬支香水裡，挑出值得先去專櫃試的幾支。</span><span data-l="en">Start with a few perfumes you have smelled, then answer ten questions. From 10,000 perfumes, we pick the few worth trying at a store first.</span></p></div>
     <div class="qbox" id="qbox"></div>
     <div id="result"></div>
   </section>
@@ -316,6 +304,7 @@ footer{color:var(--muted);font-size:13px;padding-block:0 40px}
 <div class="wrap"><footer>
 <span data-l="zh">香水庫收錄約一萬支：兩百支精選（含 OCO、觀夏等亞洲品牌，附中文香調描述與參考價），加上 Fragrantica 社群資料中討論度最高的 9,800 支（香調、前中後調、調香師、年份、持香取自其公開資料集）。停產只標示已確認的少數幾支，未標示不代表仍在產。台灣通路分三類：有專櫃或門市、多在選品店或電商、無正式通路需看線上或代購；專櫃參考價中，Le Labo、Byredo、Serge Lutens 依 2025–26 台灣報導核對，其餘為品牌主力規格的估計值。購買連結為各平台的搜尋結果頁，不代表該平台一定有貨或為正品授權通路。標「未公開」者為品牌未公布或本站尚未收錄調香師；OCO、觀夏等亞洲品牌的香調依官網意象描述整理，以實際試聞為準。調香師資料以品牌公開資訊為準；價格為台灣專櫃或官網常見規格的參考價，海外品牌以約 1 USD≈32、1 HKD≈4.1、1 CNY≈4.5、1 KRW≈0.023 台幣換算並取整，實際以購買時售價與匯率為準。配方會改版，最終以你自己的皮膚為準。</span><span data-l="en">The library holds about 10,000 perfumes: 200 hand-picked entries (including Asian brands such as OCO and To Summer, with Chinese descriptions and reference prices) plus the 9,800 most-discussed perfumes from a public Fragrantica community dataset (families, notes, perfumers, year and longevity come from that dataset). Only a few confirmed discontinued perfumes are marked; unmarked does not mean still in production. Taiwan availability has three levels: counters or stores, mostly boutiques or online, or no official retail. Prices are reference prices for common sizes in Taiwan (Le Labo, Byredo and Serge Lutens checked against 2025–26 reports; others estimated), with USD shown at about NT$32 per dollar. Shop links open search results and do not guarantee stock or authorised sellers. Formulas change — your own skin has the final say.</span>
 </footer></div>
+<div class="mark" aria-hidden="true">moquan</div>
 
 <script>
 const FAM = {
@@ -691,7 +680,7 @@ function card(p,why){
   return `<article class="strip">
     <div class="brand">${esc(p.bz&&!EN()?`${p.b}（${p.bz}）`:p.b)}</div>
     <h4>${esc(p.n)}</h4>
-    ${p.nick&&!EN()?`<div class="nick">${esc(p.nick.split(" ").slice(0,2).join("、"))}</div>`:""}
+    ${p.nick&&!EN()?`<div class="nick">${esc([...new Set(p.nick.split(" "))].slice(0,2).join("、"))}</div>`:""}
     ${inkBar(p.fam)}
     <div>${fams}</div>
     <div class="notes">${esc(EN()?(p.ke||p.k):p.k)}</div>
@@ -1017,12 +1006,12 @@ function route(){
 addEventListener("hashchange",route);
 function applyLang(){
   document.documentElement.lang=EN()?"en":"zh-Hant";
-  $("#langBtn").textContent=EN()?"中文":"EN"; $("#langBtn").setAttribute("aria-label",EN()?"切換成中文":"Switch to English");
+  $("#langBtn").textContent=EN()?"中文":"English"; $("#today").textContent=new Date().toLocaleDateString(EN()?"en-US":"zh-TW",{year:"numeric",month:"long",day:"numeric",weekday:"long"}); $("#langBtn").setAttribute("aria-label",EN()?"切換成中文":"Switch to English");
   $("#q").placeholder=tr("搜香水名、品牌或香材，例如：曠野、英國梨、BR540、無花果","Search perfume, brand or note — e.g. Sauvage, Santal 33, fig");
   const so=EN()?["Popularity","Rating","Newest","Oldest","Price: low to high"]:["熱門度","評分","年份：新到舊","年份：舊到新","價格：低到高"];
   [...$("#sort").options].forEach((o,i)=>o.textContent=so[i]);
   $("#dbStatus").textContent=statusText();
-  document.title=tr("聞路香水嚮導","Scent Path Perfume Finder");
+  document.title="Find the Perfume";
 }
 $("#langBtn").onclick=()=>{LANG=EN()?"zh":"en";try{localStorage.setItem("lang",LANG)}catch(e){}
   applyLang();renderChips();renderMoodChips();renderQ();if(quizDone)renderResult();renderMood();renderLib();renderPerf();renderNotes();};
