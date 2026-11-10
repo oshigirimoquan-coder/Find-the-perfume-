@@ -32,12 +32,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* masthead */
 .topbar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:13px;color:var(--gray);padding-block:14px 0}
-.langbtn{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:13px}
+.langbtn{min-height:44px;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:13px}
 .mast{text-align:center;padding-block:6px 14px}
 .mast h1{font-weight:900;font-size:clamp(44px,9vw,96px);line-height:1;letter-spacing:-.01em}
 .mast p{margin:8px 0 0;font-size:14px;color:var(--gray)}
 nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper)}
-.rail{border-top:3px double var(--rule);border-bottom:1px solid var(--rule);display:flex;justify-content:center;gap:4px 28px;padding-block:9px;font-size:15px}
+.rail{border-top:3px double var(--rule);border-bottom:1px solid var(--rule);display:flex;justify-content:center;gap:0 28px;padding-block:2px;font-size:15px}
+.rail a{min-height:44px;display:inline-flex;align-items:center}
 .rail a{text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;transition:border-color .15s ease;white-space:nowrap}
 .rail a:hover,.rail a[aria-current="page"]{border-bottom-color:var(--ink)}
 main{padding-block:28px 64px}
@@ -67,7 +68,7 @@ h2{font-weight:900;font-size:clamp(28px,4.4vw,44px)}
 .opt[aria-pressed="true"] b::before{content:"✓ "}
 .qnav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:4px}
 .qnav-r,.qnav-l{display:flex;gap:14px;align-items:center}
-.ghost{background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:15px}
+.ghost{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:15px}
 .ghost:disabled{opacity:.35;cursor:default}
 .ghost.sm{font-size:14px}
 .ghost[aria-pressed="true"]{font-weight:900;text-decoration-thickness:2px}
@@ -130,9 +131,22 @@ input[type=search]{width:100%}
 .pill.t-n,.pill.t-i{color:var(--ink)}
 .pill.disc{color:var(--ink);font-weight:900}
 .why{font-size:13px;font-style:italic}
+.price{font-size:14px}
+.more-info{font-size:13px}
+.more-info summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--gray);text-decoration:underline;text-underline-offset:3px;list-style:none}
+.more-info summary::-webkit-details-marker{display:none}
+.more-info summary::after{content:"＋";margin-left:6px;text-decoration:none}
+.more-info[open] summary::after{content:"－"}
+.more-info[open]{display:grid;gap:6px}
+.takeaway{border-top:3px double var(--rule);padding-top:20px;display:grid;gap:10px;justify-items:start;max-width:40em}
+.takeaway h3{font-weight:900;font-size:24px}
+.takeaway p{margin:0;color:var(--gray)}
+.takeaway textarea{width:100%;font:inherit;font-size:15px;line-height:1.7;background:transparent;color:var(--ink);border:1px solid var(--hair);padding:10px 12px;resize:vertical}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .buy{display:grid;gap:2px;font-size:12px;padding-top:6px;border-top:1px dotted var(--hair)}
 .buy .ch{color:var(--gray)}
-.buy .lk{display:flex;flex-wrap:wrap;gap:2px 12px}
+.buy .lk{display:flex;flex-wrap:wrap;gap:0 16px}
+.buy a{min-height:44px;display:inline-flex;align-items:center}
 .buy a{text-decoration:underline;text-underline-offset:2px}
 .rate{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-size:13px}
 .more{justify-self:center}
@@ -162,7 +176,7 @@ table.conc th{border-bottom-color:var(--rule);font-weight:600}
 .frow{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
 .frow > .label{width:5em;flex:none}
 .chips{display:flex;flex-wrap:wrap;gap:4px 16px}
-.chip{background:none;border:0;padding:2px 0;font-size:15px;border-bottom:1px solid transparent;transition:border-color .15s ease}
+.chip{background:none;border:0;padding:0;min-height:44px;font-size:15px;border-bottom:1px solid transparent;transition:border-color .15s ease}
 .chip:hover{border-bottom-color:var(--hair)}
 .chip[aria-pressed="true"]{font-weight:900;border-bottom-color:var(--ink)}
 .status{font-size:13px;color:var(--gray);font-style:italic}
@@ -228,17 +242,20 @@ html[lang="en"] [data-l="zh"],html:not([lang="en"]) [data-l="en"]{display:none!i
       <div class="frow"><span class="label"><span data-l="zh">價位</span><span data-l="en">Price</span></span><div class="chips" id="priceFilter"></div></div>
     </div>
     <div class="subhead"><span class="count" id="libCount"></span><label class="count"><span data-l="zh">排序</span><span data-l="en">Sort</span> <select id="sort"><option value="pop">熱門度</option><option value="rate">評分</option><option value="new">年份：新到舊</option><option value="old">年份：舊到新</option><option value="price">價格：低到高</option></select></label></div>
+    <h3 class="sr-only"><span data-l="zh">搜尋結果</span><span data-l="en">Results</span></h3>
     <div class="grid" id="libGrid"></div>
     <button class="ghost more" id="libGridMore" hidden></button>
   </section>
 
   <section data-view="perfumers" id="v-perfumers" hidden>
     <div><h2><span data-l="zh">調香師</span><span data-l="en">Perfumers</span></h2><p class="intro"><span data-l="zh">同一個調香師的作品常有相似的“筆觸”。愛上一支之後，順著調香師找，命中率通常比順著品牌找更高。</span><span data-l="en">A perfumer's works often share a recognisable “handwriting”. Once you love one scent, following the perfumer is usually a better bet than following the brand.</span></p></div>
+    <h3 class="sr-only"><span data-l="zh">調香師列表</span><span data-l="en">Perfumer list</span></h3>
     <div class="pgrid" id="pGrid"></div>
   </section>
 
   <section data-view="notes" id="v-notes" hidden>
     <div><h2><span data-l="zh">香調入門</span><span data-l="en">Scent basics</span></h2><p class="intro"><span data-l="zh">香調就是香水的“大類口味”。先認得這十四種，逛專櫃時就能用它們描述你要什麼。</span><span data-l="en">Scent families are the broad “flavours” of perfume. Learn these fourteen and you can describe what you want at any counter.</span></p></div>
+    <h3 class="sr-only"><span data-l="zh">十四種香調</span><span data-l="en">Fourteen families</span></h3>
     <div class="fgrid" id="fGrid"></div>
     <div class="basics" data-l="zh">
       <div>
@@ -695,10 +712,13 @@ function card(p,why){
     ${inkBar(p.fam)}
     <div>${fams}</div>
     ${notesHtml(EN()?(p.ke||p.k):(p.kl||p.k))}
-    ${p.p?`<div class="by">${tr("調香師","Perfumer")} <b>${esc(p.p)}</b></div>`:""}
-    <div class="meta"><span class="pill">${rn(p.r)}</span>${p.t?`<span class="pill t-${p.t}">${tn(p.t)}</span>`:""}${p.y?`<span class="pill">${p.y}</span>`:""}<span class="pill">${gn(p.g)}</span>${p.disc?`<span class="pill disc">${tr("已停產","Discontinued")}</span>`:""}<span class="pill">${p.tw?`${p.av==="c"?tr("專櫃參考價 約","Taiwan retail"):tr("參考價 約","Approx.")} ${twd(p.tw)}${EN()?" ("+usd(p.tw)+")":""} / ${p.pz}ml`:tr("價格未收錄","Price n/a")}</span><span class="pill">${tr("存在感","Projection")} ${"●".repeat(p.si)}${"○".repeat(3-p.si)}</span>${p.lo?`<span class="pill">${tr("持香","Longevity")} ${(p.lo/10).toFixed(1)}/5</span>`:""}</div>
+    <div class="price">${p.disc?`<b>${tr("已停產","Discontinued")}</b>　`:""}${p.tw?`${p.av==="c"?tr("專櫃參考價","Taiwan retail"):tr("參考價","Approx.")} ${twd(p.tw)}${EN()?" ("+usd(p.tw)+")":""}／${p.pz}ml`:tr("價格未收錄","Price n/a")}</div>
     ${why?`<div class="why">${why}</div>`:""}
+    <details class="more-info"><summary>${tr("詳細資料與購買","Details and where to buy")}</summary>
+    ${p.p?`<div class="by">${tr("調香師","Perfumer")} <b>${esc(p.p)}</b></div>`:""}
+    <div class="meta"><span class="pill">${rn(p.r)}</span>${p.t?`<span class="pill t-${p.t}">${tn(p.t)}</span>`:""}${p.y?`<span class="pill">${p.y}</span>`:""}<span class="pill">${gn(p.g)}</span><span class="pill">${tr("存在感","Projection")} ${"●".repeat(p.si)}${"○".repeat(3-p.si)}</span>${p.lo?`<span class="pill">${tr("持香","Longevity")} ${(p.lo/10).toFixed(1)}/5</span>`:""}</div>
     ${buyLinks(p)}
+    </details>
   </article>`;
 }
 
@@ -782,11 +802,12 @@ function anchorChips(){
   const all=[...ANC.like.map(k=>chip(k,"like")),...ANC.dislike.map(k=>chip(k,"dislike"))];
   return all.length?`<div class="achips">${all.join("")}</div>`:"";
 }
+const arow=p=>`<div class="arow"><span>${esc(p.b)} <b>${esc(p.n)}</b></span><span><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="like" aria-pressed="${ANC.like.includes(pkey(p))}">${tr("喜歡","Liked")}</button><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="dislike" aria-pressed="${ANC.dislike.includes(pkey(p))}">${tr("不喜歡","Disliked")}</button></span></div>`;
 function renderQ(){
   const QL=QQ(); if(step>=QL.length) step=QL.length-1;
   const q=QL[step], sel=A[q.id];
   const head=`<div class="progress" aria-hidden="true">${QL.map((_,i)=>`<span class="${i<=step?"on":""}"></span>`).join("")}</div>
-    <div class="qtitle">${qt(q.t)}</div>${q.h?`<p class="qhint">${qt(q.h)}</p>`:""}`;
+    <h3 class="qtitle">${qt(q.t)}</h3>${q.h?`<p class="qhint">${qt(q.h)}</p>`:""}`;
   let body="";
   if(q.type==="anchor"){
     body=`<div class="asearch"><input type="search" id="aq" placeholder="${tr("例如：英國梨、Sauvage、檀香33","e.g. Sauvage, Santal 33, Baccarat Rouge")}" autocomplete="off" aria-label="${tr("搜尋聞過的香水","Search perfumes you've smelled")}"><div id="alist" class="alist"></div></div>${anchorChips()}`;
@@ -795,7 +816,7 @@ function renderQ(){
     body=`<div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="${on(i)}"><b>${qt(o[0])}</b>${qt(o[1])?`<small>${qt(o[1])}</small>`:""}</button>`).join("")}</div>`;
   }
   const last=step===QL.length-1, many=q.type!=="one";
-  const nextLabel=last?tr("看結果","See results"):(q.type==="many"&&!(sel||[]).length?tr("略過","Skip"):tr("下一題","Next"));
+  const nextLabel=last?tr("看結果","See results"):(q.type==="anchor"&&!ANC.like.length&&!ANC.dislike.length)?tr("沒聞過，直接下一題","None yet, next"):(q.type==="many"&&!(sel||[]).length?tr("略過","Skip"):tr("下一題","Next"));
   $("#qbox").innerHTML=`${head}${body}
     <div class="qnav"><span class="qnav-l"><button class="ghost" id="back" ${step===0?"disabled":""}>${tr("上一題","Back")}</button><span class="count">${step+1} / ${QL.length}</span></span>
     <span class="qnav-r">${quizDone?`<button class="ghost" id="restart">${tr("重新測","Start over")}</button>`:""}${many||last?`<button class="primary" id="next">${nextLabel}</button>`:""}</span></div>`;
@@ -807,14 +828,16 @@ function renderQ(){
   if(q.type==="anchor"){
     const inp=$("#aq"),list=$("#alist");
     inp.oninput=()=>{const t=inp.value.trim().split(/\s+/).map(norm).filter(Boolean);
-      if(!t.length){list.innerHTML="";return}
+      if(!t.length){const pop=P.filter(p=>p.v).sort((a,b)=>b.v-a.v).slice(0,6);
+        list.innerHTML=pop.length?`<p class="qhint">${tr("不知道要搜什麼？這幾支很多人聞過：","Not sure what to search? Many people have smelled these:")}</p>`+pop.map(arow).join(""):"";return}
       const tp=t.map(toPy);
       const hits=P.filter(p=>t.every((x,i)=>p.key.includes(x)||p.py.includes(tp[i]))).sort((a,b)=>b.v-a.v).slice(0,8);
-      list.innerHTML=hits.length?hits.map(p=>`<div class="arow"><span>${esc(p.b)} <b>${esc(p.n)}</b></span><span><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="like">${tr("喜歡","Liked")}</button><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="dislike">${tr("不喜歡","Disliked")}</button></span></div>`).join(""):`<p class="qhint">${tr("找不到，換個寫法試試。完整香水庫還在載入的話，稍等一下再搜。","Nothing found. Try another spelling, or wait a moment if the full library is still loading.")}</p>`;
+      list.innerHTML=hits.length?hits.map(arow).join(""):`<p class="qhint">${tr("找不到，換個寫法試試。完整香水庫還在載入的話，稍等一下再搜。","Nothing found. Try another spelling, or wait a moment if the full library is still loading.")}</p>`;
     };
     list.onclick=e=>{const b=e.target.closest("[data-add]");if(!b)return;const k=b.dataset.add,kind=b.dataset.kind,o=kind==="like"?"dislike":"like";
       ANC[o]=ANC[o].filter(x=>x!==k); if(!ANC[kind].includes(k))ANC[kind].push(k); saveQ(); renderQ(); $("#aq").focus();};
   }
+  if(q.type==="anchor") $("#aq").oninput();
   $("#qbox").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{ANC[b.dataset.kind]=ANC[b.dataset.kind].filter(x=>x!==b.dataset.rm);saveQ();renderQ();});
   const bk=$("#back"); if(bk) bk.onclick=()=>{step--;saveQ();renderQ();};
   const nx=$("#next"); if(nx) nx.onclick=()=>{ if(last){quizDone=true;saveQ();renderQ();renderResult();$("#result").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});} else {step++;saveQ();renderQ();} };
@@ -899,7 +922,7 @@ function renderResult(){
         ${neg.length?`<p class="avoid">${tr("先避開：","Avoid for now: ")}${neg.map(fn).join(sep)}</p>`:""}
         <p class="avoid">${tr(`範圍：${scope}，符合的有 ${pool.length.toLocaleString("en-US")} 支`,`${pool.length.toLocaleString("en-US")} perfumes considered`)}${pr.like.length?tr(`；已用 ${pr.like.length} 支你喜歡的香水校準`,`, calibrated with ${pr.like.length} you liked`):""}</p>
       </div>
-      <div class="bars">${pos.slice(0,6).map(k=>`<div class="bar" style="--c:var(--${k})"><span>${fn(k)}</span><div class="track"><div class="fill" style="width:${pr.v[k]/max*100}%"></div></div><span class="n">${pr.v[k]}</span></div>`).join("")}</div>
+      <div class="bars">${pos.slice(0,6).map(k=>`<div class="bar" style="--c:var(--${k})"><span>${fn(k)}</span><div class="track"><div class="fill" style="width:${pr.v[k]/max*100}%"></div></div><span class="n">${pr.v[k]/max>=.66?tr("強","Strong"):pr.v[k]/max>=.33?tr("中","Medium"):tr("弱","Light")}</span></div>`).join("")}</div>
     </div>
     <div class="note-box">${tr("<b>問卷只能推測方向，真正準的是你的鼻子。</b> 先去專櫃用試香紙聞下面的試香清單，或買 1–2ml 分裝。聞過之後回來按「喜歡」或「不喜歡」，推薦會依照實際聞到的結果重新排序。","<b>A quiz can only guess — your nose decides.</b> Try the list below on paper strips at a store, or get 1–2 ml samples. Then come back and mark each as Liked or Disliked; the recommendations re-rank based on what you actually smelled.")}</div>
     ${tryList.length?`<div class="subhead"><h3>${tr("試香清單","Your sample list")}</h3><span class="count">${tr("6 支、不同品牌，建議一次試 3–4 支","6 picks from different brands — try 3–4 at a time")}</span></div>
@@ -910,7 +933,13 @@ function renderResult(){
     <div class="pgrid">${perf.map(x=>pCard(x.n,x.d,x.f)).join("")}</div>
     ${more.length?`<div class="subhead"><h3>${tr("更多匹配的香水","More matches")}</h3><span class="count">${tr("按契合度與熱門度排序","By fit and popularity")}</span></div>
     <div class="grid">${more.map(r=>rcard(r.p,why(r))).join("")}</div>`:""}
+    ${tryList.length?`<div class="takeaway"><h3>${tr("帶著這份清單去試香","Take this list to the store")}</h3>
+      <p>${tr("先用試香紙一次聞三到四支，留下最喜歡的兩支噴在手腕，三十分鐘和三小時後各聞一次。回來在卡片上按「喜歡」或「不喜歡」，推薦會跟著修正。","Smell three or four on paper strips, spray your two favourites on your wrists, and check again after 30 minutes and 3 hours. Then come back and mark them Liked or Disliked to refine the picks.")}</p>
+      <textarea id="takeList" readonly rows="${tryList.length*2}" aria-label="${tr("試香清單","Sample list")}">${esc(tryList.map((r,i)=>`${i+1}. ${r.p.b} ${r.p.n}${r.p.tw?`（${twd(r.p.tw)}／${r.p.pz}ml）`:""}`).join("\n"))}</textarea>
+      <button class="primary" id="copyList" type="button">${tr("複製清單","Copy the list")}</button> <span class="count" id="copyMsg" role="status"></span></div>`:""}
   </div>`;
+  const cb=$("#copyList"); if(cb) cb.onclick=()=>{const ta=$("#takeList");
+    navigator.clipboard.writeText(ta.value).then(()=>{$("#copyMsg").textContent=tr("已複製，可以貼到備忘錄或傳給朋友。","Copied. Paste it into your notes or send it to a friend.")}).catch(()=>{ta.focus();ta.select();$("#copyMsg").textContent=tr("已選取文字，請按複製。","Text selected. Copy it manually.")});};
   $("#result").querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{
     const k=b.dataset.k,kind=b.dataset.rate,o=kind==="like"?"dislike":"like";
     if(ANC[kind].includes(k)) ANC[kind]=ANC[kind].filter(x=>x!==k); else {ANC[kind].push(k);ANC[o]=ANC[o].filter(x=>x!==k);}
