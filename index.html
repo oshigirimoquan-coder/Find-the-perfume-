@@ -14,11 +14,11 @@
   --paper:#D5DEE6; --ink:#101823; --gray:#475465; --rule:#101823; --hair:#B3C0CC; --tint:#C9D4DE;
   --serif:"Chiron Sung HK","Chiron Sung HK WS","Songti TC","PMingLiU",serif;
   --display:var(--serif); --body:var(--serif); --mono:var(--serif);
-  --cit:var(--ink);--grn:var(--ink);--aqu:var(--ink);--flo:var(--ink);--wht:var(--ink);--fru:var(--ink);--gou:var(--ink);--wod:var(--ink);--amb:var(--ink);--smk:var(--ink);--lea:var(--ink);--msk:var(--ink);--aro:var(--ink);--pow:var(--ink);
+  --cit:#A87708;--grn:#3F6B2E;--aqu:#1F6E8C;--flo:#B2456C;--wht:#8C6E3F;--fru:#C2502A;--gou:#7E4F2C;--wod:#5E4530;--amb:#A3561A;--smk:#4E4A57;--lea:#55342A;--msk:#7C6E8C;--aro:#3F6D5F;--pow:#7D6AA1;
   --accent:var(--ink); --accent-soft:var(--tint); --gold:var(--gray); --line:var(--hair); --card:var(--paper); --muted:var(--gray);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;--cit:#E8B53A;--grn:#86B56C;--aqu:#5FB3D6;--flo:#E8869F;--wht:#D2B98C;--fru:#EE8A63;--gou:#C8946A;--wod:#B8916A;--amb:#E39A55;--smk:#A9A3B6;--lea:#C08870;--msk:#C3B7CF;--aro:#8DBFAE;--pow:#BEAEDB;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#12171C;--ink:#E3E8EC;--gray:#A2ADB8;--rule:#E3E8EC;--hair:#303942;--tint:#1C232B;--cit:#E8B53A;--grn:#86B56C;--aqu:#5FB3D6;--flo:#E8869F;--wht:#D2B98C;--fru:#EE8A63;--gou:#C8946A;--wod:#B8916A;--amb:#E39A55;--smk:#A9A3B6;--lea:#C08870;--msk:#C3B7CF;--aro:#8DBFAE;--pow:#BEAEDB;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{overflow-x:clip}
 body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.7;font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
@@ -96,7 +96,7 @@ input[type=search]{width:100%}
 .bars{display:grid;gap:10px;align-content:start}
 .bar{display:grid;grid-template-columns:6em minmax(0,1fr) 2.5em;gap:10px;align-items:center;font-size:14px}
 .bar .track{height:6px;background:var(--hair)}
-.bar .fill{height:100%;background:var(--ink)}
+.bar .fill{height:100%;background:var(--c)}
 .bar .n{color:var(--gray);text-align:right}
 .note-box{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:14px;font-size:15px}
 .note-box .ok{font-weight:900}
@@ -117,8 +117,11 @@ input[type=search]{width:100%}
 .strip:hover h4{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 .nick{font-size:14px;margin-top:-4px}
 .ink{display:none}
-.fam{font-size:13px;color:var(--gray)}
-.fam + .fam::before{content:"、";margin-left:-4px}
+.fam{display:inline-flex;align-items:center;gap:5px;font-size:13px;margin-right:10px}
+.fam::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.pyr{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;margin:2px 0 0;font-size:14px}
+.pyr dt{color:var(--gray);white-space:nowrap}
+.pyr dd{margin:0}
 .strip .notes{font-size:14px}
 .strip .by{font-size:13px;color:var(--gray)}
 .strip .by b{color:var(--ink);font-weight:600}
@@ -142,7 +145,8 @@ input[type=search]{width:100%}
 .pcard > p{color:var(--gray)}
 .pcard .works{font-size:14px}
 .fcard .ex{font-size:14px;color:var(--gray)}
-.fcard h4::before{display:none}
+.fcard h4{display:flex;align-items:center;gap:8px}
+.fcard h4::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c)}
 .basics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:3px double var(--rule);padding-top:20px}
 .basics > div{padding-inline:24px;border-left:1px solid var(--hair);min-width:0}
 .basics > div:first-child{padding-left:0;border-left:0}
@@ -675,6 +679,13 @@ function buyLinks(p){
   if(p.url) L.push(["Fragrantica",`https://www.fragrantica.com/perfume/${p.url}.html`]);
   return `<div class="buy"><span class="label">${tr("哪裡買","Where to buy")}</span><span class="ch">${p.disc?tr("已停產，只能找剩餘庫存、二手或分裝","Discontinued — look for leftover stock, second-hand or decants"):avn(p.av)}</span><span class="lk">${L.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n}</a>`).join("")}</span></div>`;
 }
+function notesHtml(t){
+  const parts=String(t).split(/｜| \| /);
+  const lab=EN()?{Top:"Top",Heart:"Heart",Base:"Base"}:{"前":"前調","中":"中調","後":"後調"};
+  const rows=parts.map(x=>{const m=x.match(/^(前|中|後|Top|Heart|Base)[：:]\s*(.*)$/);return m?[lab[m[1]],m[2]]:null});
+  if(rows.length>1&&rows.every(Boolean)) return `<dl class="pyr">${rows.map(([a,b])=>`<dt>${a}</dt><dd>${esc(b)}</dd>`).join("")}</dl>`;
+  return `<div class="notes">${esc(t)}</div>`;
+}
 function card(p,why){
   const fams=Object.entries(p.fam).sort((a,b)=>b[1]-a[1]).map(([k])=>`<span class="fam" style="--c:var(--${k})">${fn(k)}</span>`).join(" ");
   return `<article class="strip">
@@ -683,7 +694,7 @@ function card(p,why){
     ${p.nick&&!EN()?`<div class="nick">${esc([...new Set(p.nick.split(" "))].slice(0,2).join("、"))}</div>`:""}
     ${inkBar(p.fam)}
     <div>${fams}</div>
-    <div class="notes">${esc(EN()?(p.ke||p.k):p.k)}</div>
+    ${notesHtml(EN()?(p.ke||p.k):(p.kl||p.k))}
     ${p.p?`<div class="by">${tr("調香師","Perfumer")} <b>${esc(p.p)}</b></div>`:""}
     <div class="meta"><span class="pill">${rn(p.r)}</span>${p.t?`<span class="pill t-${p.t}">${tn(p.t)}</span>`:""}${p.y?`<span class="pill">${p.y}</span>`:""}<span class="pill">${gn(p.g)}</span>${p.disc?`<span class="pill disc">${tr("已停產","Discontinued")}</span>`:""}<span class="pill">${p.tw?`${p.av==="c"?tr("專櫃參考價 約","Taiwan retail"):tr("參考價 約","Approx.")} ${twd(p.tw)}${EN()?" ("+usd(p.tw)+")":""} / ${p.pz}ml`:tr("價格未收錄","Price n/a")}</span><span class="pill">${tr("存在感","Projection")} ${"●".repeat(p.si)}${"○".repeat(3-p.si)}</span>${p.lo?`<span class="pill">${tr("持香","Longevity")} ${(p.lo/10).toFixed(1)}/5</span>`:""}</div>
     ${why?`<div class="why">${why}</div>`:""}
@@ -711,7 +722,7 @@ async function loadDB(){
     if(rp.ok){const g=await rp.json();for(const k in g)for(const c of g[k])PYM[c]=k;}
     const B=D.brands,N=D.notes,PF=D.perfumers; const BA={}; B.forEach(b=>BA[b[0]]=b[2]); const BR={}; B.forEach(b=>BR[b[0]]=b); P.forEach(p=>{const a=BA[CURB[p.b]||p.b]||"";p.ba=a;p.bz=(a.match(/[\u3400-\u9fff]+/)||[""])[0];const br=BR[CURB[p.b]||p.b];if(br&&br[5])p.av=br[5];});
     Object.entries(D.extras).forEach(([i,e])=>{const p=P[+i];if(!p)return;
-      if(e[0])p.y=e[0]; p.g=e[1]; if(e[3])p.lo=e[3]; if(e[4])p.ra=e[4]; p.v=e[5]||0; p.url=e[6]||""; p.nick=e[7]||""; p.gl=e[8]||""; if(e[2]) p.ke=noteText(e[2],N,1);
+      if(e[0])p.y=e[0]; p.g=e[1]; if(e[3])p.lo=e[3]; if(e[4])p.ra=e[4]; p.v=e[5]||0; p.url=e[6]||""; p.nick=e[7]||""; p.gl=e[8]||""; if(e[2]){p.ke=noteText(e[2],N,1);p.kl=noteText(e[2],N);}
       p.q=norm([p.n,p.b,p.p,p.k,p.nick,e[2]?noteSearch(e[2],N):""].join(" ")+" "+(p.ba||""));
       setKeys(p);
     });
