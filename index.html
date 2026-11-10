@@ -130,6 +130,24 @@ input[type=search],select{font:inherit;font-size:16px;background:var(--paper);co
 input[type=search]{flex:1;min-width:0}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .empty{color:var(--muted);padding:20px 0}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.qhint{margin:-8px 0 0;color:var(--muted);font-size:14px}
+.qnav-r{display:flex;gap:8px}
+.asearch{display:grid;gap:8px}
+.asearch input{width:100%}
+.alist{display:grid;gap:6px}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 10px;background:var(--paper);border:1px solid var(--line);border-radius:6px;font-size:14px}
+.arow > span:last-child{display:flex;gap:6px}
+.ghost.sm{padding:3px 10px;font-size:13px}
+.ghost[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.achips{display:flex;flex-wrap:wrap;gap:6px}
+.achip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 4px 3px 10px;font-size:13px;border:1px solid var(--line)}
+.achip.like{border-color:var(--grn);color:var(--grn)}
+.achip.dislike{border-color:var(--fru);color:var(--fru)}
+.achip button{background:none;border:0;padding:0 6px;font-size:15px;color:inherit}
+.note-box{background:var(--accent-soft);border-radius:6px;padding:14px 16px;font-size:14px}
+.note-box .ok{color:var(--accent);font-weight:600}
+.rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .nick{font-size:13px;color:var(--accent);margin-top:-4px}
 .buy{display:grid;gap:4px;border-top:1px dashed var(--line);padding-top:8px;font-size:12px}
 .buy .ch{color:var(--muted)}
@@ -165,7 +183,7 @@ footer{color:var(--muted);font-size:13px;padding-block:0 40px}
   <div>
     <div class="label">Scent Path · 香水新手嚮導</div>
     <h1>不懂香水，<br>也能找到<em>你的味道</em></h1>
-    <p>回答 7 個生活小問題，看你偏向哪種香調、哪些調香師的風格和你合拍，再從大牌到小眾獨立品牌裡挑出值得先去試的幾支。</p>
+    <p>先挑幾支你聞過的香水，再回答 10 個可複選的問題，看你偏向哪種香調、哪些調香師的風格和你合拍，再從大牌到小眾獨立品牌裡挑出值得先去試的幾支。</p>
   </div>
   <div class="strips" aria-hidden="true" id="strips"></div>
 </header>
@@ -514,43 +532,50 @@ const PERFUMERS = [
   ["Geza Schoen","極簡分子派，用一兩種原料放大皮膚自己的味道。",{msk:3,wod:2}],
   ["Jacques Guerlain","二十世紀的經典大師，琥珀東方與粉感的源頭之一。",{amb:3,pow:3}]
 ];
+// type: one=單選, many=複選, anchor=聞過的香水
+// option: [標題, 說明, 香調權重, 香材關鍵字(可省), 參數值(可省)]
 const Q = [
-  {t:"先來一杯：你最想點哪個？",o:[
-    ["檸檬氣泡水","酸、冰、清爽",{cit:3,aqu:1}],
-    ["冷泡綠茶","微苦、乾淨",{grn:3,aro:1}],
-    ["焦糖拿鐵","甜、暖、奶香",{gou:3,amb:1}],
-    ["威士忌 / 紅酒","醇厚、有層次",{lea:2,wod:2,fru:1,amb:1}],
-    ["熱牛奶 / 豆漿","柔軟、像被包住",{msk:3,pow:2}]]},
-  {t:"閉上眼，你最想待在哪裡？",o:[
-    ["海邊，有風","",{aqu:3,cit:1}],
-    ["雨後的森林","",{grn:2,wod:2}],
-    ["開滿花的院子","",{flo:3,wht:1,fru:1}],
-    ["有壁爐的書房","",{wod:2,lea:2,smk:1,gou:1}],
-    ["剛曬好的白床單","",{msk:3,pow:1}],
-    ["安靜的寺廟","",{smk:3,amb:1,wod:1}]]},
-  {t:"你主要會在哪個季節用？",k:"season",o:[
-    ["春天","",{flo:1,grn:1},"s"],["夏天","",{cit:1,aqu:1},"u"],
-    ["秋天","",{wod:1,amb:1},"a"],["冬天","",{amb:1,gou:1},"w"],["一年四季都用","",{},""]]},
-  {t:"你希望別人聞到之後，對你的印象是？",o:[
-    ["乾淨、可靠","",{msk:2,cit:1,aro:1}],
-    ["溫柔、好親近","",{pow:2,flo:1,msk:1}],
-    ["神秘、有個性","",{smk:2,lea:1,wod:1}],
-    ["性感、成熟","",{amb:2,wht:2,gou:1}],
-    ["活潑、有朝氣","",{fru:2,cit:2}]]},
-  {t:"你希望香味有多明顯？",k:"sillage",o:[
-    ["只有靠近的人聞得到","像自己的體香",{msk:1},1],
-    ["一臂距離聞得到","日常剛好",{},2],
-    ["走進房間就被記住","存在感強",{amb:1},3]]},
-  {t:"你最受不了哪種味道？",o:[
-    ["太甜膩","",{gou:-3,amb:-1}],
-    ["很濃的花香","",{flo:-2,wht:-3}],
-    ["煙味或皮革味","",{smk:-3,lea:-3}],
-    ["像老一輩的香粉","",{pow:-3}],
-    ["像洗衣精、清潔劑","",{msk:-2,aqu:-2,cit:-1}],
-    ["都還好","",{}]]},
-  {t:"最常在什麼場合用？",k:"occ",o:[
-    ["上課 / 上班","",{},"office"],["約會","",{},"date"],
-    ["日常出門","",{},"daily"],["晚上的聚會","",{amb:1},"party"]]}
+  {t:"有沒有聞過、而且有印象的香水？",h:"真的聞過的香水最準，後面的問題只是推測。喜歡和不喜歡的都可以加，沒有就直接按「下一題」",type:"anchor"},
+  {t:"你會在哪裡買？",type:"one",k:"buy",o:[
+    ["只要台灣專櫃或門市","可以現場試香、有售後",{},[],"c"],
+    ["電商、選品店也可以","momo、蝦皮、香水選品店",{},[],"co"],
+    ["代購、海外都可以","範圍最大",{},[],"con"]]},
+  {t:"喜歡喝哪些？",h:"可複選",type:"many",o:[
+    ["柑橘氣泡水","酸、冰、清爽",{cit:3,aqu:1},["檸檬","葡萄柚","佛手柑"]],
+    ["綠茶、烏龍","微苦、乾淨",{grn:3,aro:1},["茶"]],
+    ["奶茶、拿鐵","甜、暖、奶香",{gou:3,amb:1},["牛奶","咖啡","香草"]],
+    ["黑咖啡","焙火、微苦",{gou:2,wod:1,smk:1},["咖啡"]],
+    ["威士忌、紅酒","醇厚、有層次",{lea:2,wod:2,fru:1,amb:1},["威士忌","蘭姆","干邑"]],
+    ["水果茶","多汁、酸甜",{fru:3,flo:1},["桃","黑醋栗","荔枝"]],
+    ["熱牛奶、豆漿","柔軟、像被包住",{msk:3,pow:2},["牛奶","米"]]]},
+  {t:"喜歡哪些甜點或零食？",h:"可複選",type:"many",o:[
+    ["香草冰淇淋","",{gou:3},["香草"]],["焦糖布丁","",{gou:3,amb:1},["焦糖"]],
+    ["黑巧克力","",{gou:2,smk:1},["巧克力","可可"]],["抹茶甜點","",{grn:2,gou:1},["抹茶","茶"]],
+    ["水果塔","",{fru:3,gou:1},["莓","桃","梨"]],["烤堅果","",{gou:2,wod:1},["杏仁","榛果","開心果"]],
+    ["椰子、熱帶水果","",{fru:2,gou:1,wht:1},["椰子","芒果","鳳梨"]],["不太吃甜","",{gou:-2},[]]]},
+  {t:"生活裡喜歡聞到哪些味道？",h:"可複選，這題最接近實際香材",type:"many",o:[
+    ["剛洗好的衣服","",{msk:3,pow:1},["麝香","醛"]],["新書、紙張","",{wod:2,pow:1},["紙","雪松"]],
+    ["雨後泥土","",{grn:2,wod:2},["香根草","苔蘚","廣藿香"]],["剝柑橘皮","",{cit:3},["橙","橘","柑橘"]],
+    ["花店","",{flo:3,wht:1},["玫瑰","茉莉","牡丹"]],["木頭家具","",{wod:3},["檀香","雪松"]],
+    ["新皮包","",{lea:3},["皮革","麂皮"]],["寺廟、線香","",{smk:3,amb:1},["焚香","乳香","沒藥"]],
+    ["海風","",{aqu:3,cit:1},["海","鹽"]],["剛割的草","",{grn:3,aro:1},["青草","綠葉","白松香"]],
+    ["香料市場","",{amb:2,aro:1},["肉桂","小豆蔻","番紅花"]],["嬰兒爽身粉","",{pow:3,msk:1},["鳶尾","紫羅蘭"]]]},
+  {t:"閉上眼，你想待在哪裡？",h:"可複選",type:"many",o:[
+    ["海邊，有風","",{aqu:3,cit:1}],["雨後的森林","",{grn:2,wod:2}],["開滿花的院子","",{flo:3,wht:1,fru:1}],
+    ["有壁爐的書房","",{wod:2,lea:2,smk:1,gou:1}],["剛曬好的白床單","",{msk:3,pow:1}],["安靜的寺廟","",{smk:3,amb:1,wod:1}],
+    ["熱帶夜晚","",{wht:2,amb:1,gou:1}]]},
+  {t:"主要在哪些季節用？",h:"可複選",type:"many",k:"season",o:[
+    ["春天","",{flo:1,grn:1},[],"s"],["夏天","",{cit:1,aqu:1},[],"u"],["秋天","",{wod:1,amb:1},[],"a"],["冬天","",{amb:1,gou:1},[],"w"]]},
+  {t:"最常在什麼場合用？",h:"可複選",type:"many",k:"occ",o:[
+    ["上課、上班","",{},[],"office"],["約會","",{},[],"date"],["日常出門","",{},[],"daily"],["晚上的聚會","",{amb:1},[],"party"],["運動之後","",{cit:1,aqu:1},[],"sport"]]},
+  {t:"希望別人聞到後，對你的印象是？",h:"可複選",type:"many",o:[
+    ["乾淨、可靠","",{msk:2,cit:1,aro:1}],["溫柔、好親近","",{pow:2,flo:1,msk:1}],["神秘、有個性","",{smk:2,lea:1,wod:1}],
+    ["性感、成熟","",{amb:2,wht:2,gou:1}],["活潑、有朝氣","",{fru:2,cit:2}],["文青、安靜","",{wod:2,grn:1,pow:1}]]},
+  {t:"希望香味有多明顯？",type:"one",k:"sillage",o:[
+    ["只有靠近的人聞得到","像自己的體香",{msk:1},[],1],["一臂距離聞得到","日常剛好",{},[],2],["走進房間就被記住","存在感強",{amb:1},[],3]]},
+  {t:"受不了哪些味道？",h:"可複選",type:"many",o:[
+    ["太甜膩","",{gou:-3,amb:-1}],["很濃的花香","",{flo:-2,wht:-3}],["煙味、皮革味","",{smk:-3,lea:-3}],
+    ["老派香粉","",{pow:-3}],["像洗衣精、清潔劑","",{msk:-2,aqu:-2,cit:-1}],["太刺鼻的香料","",{amb:-2,aro:-1}],["都還好","",{}]]}
 ];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -633,7 +658,7 @@ async function loadDB(){
     await loadAdditions();
     st.textContent=`已載入完整香水庫，共 ${P.length.toLocaleString("en-US")} 支（${new Set(P.map(p=>p.b)).size} 個品牌${ADDN?`，含自訂 ${ADDN} 支`:""}）`;
     renderLib();renderMood();renderPerf();renderNotes();
-    if(answers.length===Q.length) renderResult();
+    renderQ(); if(quizDone) renderResult();
   }catch(e){ st.textContent="完整香水庫載入失敗，目前只顯示精選 "+P.length+" 支。重新整理頁面可以再試一次。"; }
 }
 const CURB={"Jo Malone":"Jo Malone London","Maison Margiela Replica":"Maison Martin Margiela","Frédéric Malle":"Frederic Malle Editions de Parfums","Kilian":"By Kilian","Lattafa":"Lattafa Perfumes","Juliette Has a Gun":"Juliette Has A Gun","Comme des Garçons":"Comme des Garcons","Zoologist":"Zoologist Perfumes","D.S. & Durga":"DS&Durga","SHIRO":"Shiro","觀夏 To Summer":"To Summer | 观夏"};
@@ -659,58 +684,124 @@ async function loadAdditions(){
   }catch(e){}
 }
 /* ---------- quiz ---------- */
-let step=0, answers=[];
+const QS_KEY="scentQuiz2";
+let step=0, A=[], ANC={like:[],dislike:[]}, quizDone=false;
+try{const s=JSON.parse(localStorage.getItem(QS_KEY)||"null"); if(s){A=s.A||[];ANC=s.ANC||ANC;quizDone=!!s.done;step=quizDone?Q.length-1:(s.step||0);}}catch(e){}
+function saveQ(){try{localStorage.setItem(QS_KEY,JSON.stringify({A,ANC,step,done:quizDone}))}catch(e){}}
+const pkey=p=>p.b+"|"+p.n;
+const byKey=k=>P.find(p=>pkey(p)===k);
+function anchorChips(){
+  const chip=(k,kind)=>{const p=byKey(k);const label=p?`${p.b} · ${p.n}`:k.replace("|"," · ");
+    return `<span class="achip ${kind}">${kind==="like"?"喜歡":"不喜歡"}：${esc(label)}<button aria-label="移除" data-rm="${esc(k)}" data-kind="${kind}">×</button></span>`};
+  const all=[...ANC.like.map(k=>chip(k,"like")),...ANC.dislike.map(k=>chip(k,"dislike"))];
+  return all.length?`<div class="achips">${all.join("")}</div>`:"";
+}
 function renderQ(){
-  const q=Q[step];
-  $("#qbox").innerHTML=`
-    <div class="progress" aria-hidden="true">${Q.map((_,i)=>`<span class="${i<=step?"on":""}"></span>`).join("")}</div>
-    <div class="label">問題 ${step+1} / ${Q.length}</div>
-    <div class="qtitle">${q.t}</div>
-    <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" ${answers[step]===i?'style="border-color:var(--accent)"':""}><b>${o[0]}</b>${o[1]?`<small>${o[1]}</small>`:""}</button>`).join("")}</div>
-    <div class="qnav"><button class="ghost" id="back" ${step===0?"disabled":""}>上一題</button>${answers.length===Q.length?'<button class="ghost" id="restart">重新測</button>':""}</div>`;
+  const q=Q[step], sel=A[step];
+  const head=`<div class="progress" aria-hidden="true">${Q.map((_,i)=>`<span class="${i<=step?"on":""}"></span>`).join("")}</div>
+    <div class="label">問題 ${step+1} / ${Q.length}</div><div class="qtitle">${q.t}</div>${q.h?`<p class="qhint">${q.h}</p>`:""}`;
+  let body="";
+  if(q.type==="anchor"){
+    body=`<div class="asearch"><input type="search" id="aq" placeholder="例如：英國梨、Sauvage、檀香33" autocomplete="off" aria-label="搜尋聞過的香水"><div id="alist" class="alist"></div></div>${anchorChips()}`;
+  }else{
+    const on=i=>q.type==="one"?sel===i:(sel||[]).includes(i);
+    body=`<div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="${on(i)}"><b>${o[0]}</b>${o[1]?`<small>${o[1]}</small>`:""}</button>`).join("")}</div>`;
+  }
+  const last=step===Q.length-1, many=q.type!=="one"||false;
+  const nextLabel=last?"看結果":(many&&!(sel||[]).length&&q.type==="many"?"略過":"下一題");
+  $("#qbox").innerHTML=`${head}${body}
+    <div class="qnav"><button class="ghost" id="back" ${step===0?"disabled":""}>上一題</button>
+    <span class="qnav-r">${quizDone?'<button class="ghost" id="restart">重新測</button>':""}${many||last?`<button class="primary" id="next">${nextLabel}</button>`:""}</span></div>`;
   $("#qbox").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    answers[step]=+b.dataset.i;
-    if(step<Q.length-1){step++;renderQ();}
-    else{renderQ();renderResult();$("#result").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});}
+    const i=+b.dataset.i;
+    if(q.type==="one"){A[step]=i;saveQ();setTimeout(()=>{step++;saveQ();renderQ();},120);renderQ();return;}
+    const s=new Set(A[step]||[]); s.has(i)?s.delete(i):s.add(i); A[step]=[...s]; saveQ(); renderQ();
   });
-  const bk=$("#back"); if(bk) bk.onclick=()=>{step--;renderQ();};
-  const rs=$("#restart"); if(rs) rs.onclick=()=>{step=0;answers=[];$("#result").innerHTML="";renderQ();};
+  if(q.type==="anchor"){
+    const inp=$("#aq"),list=$("#alist");
+    inp.oninput=()=>{const t=inp.value.trim().split(/\s+/).map(norm).filter(Boolean);
+      if(!t.length){list.innerHTML="";return}
+      const tp=t.map(toPy);
+      const hits=P.filter(p=>t.every((x,i)=>p.key.includes(x)||p.py.includes(tp[i]))).sort((a,b)=>b.v-a.v).slice(0,8);
+      list.innerHTML=hits.length?hits.map(p=>`<div class="arow"><span>${esc(p.b)} · <b>${esc(p.n)}</b></span><span><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="like">喜歡</button><button class="ghost sm" data-add="${esc(pkey(p))}" data-kind="dislike">不喜歡</button></span></div>`).join(""):'<p class="qhint">找不到，換個寫法試試。完整香水庫還在載入的話，稍等一下再搜。</p>';
+    };
+    list.onclick=e=>{const b=e.target.closest("[data-add]");if(!b)return;const k=b.dataset.add,kind=b.dataset.kind,o=kind==="like"?"dislike":"like";
+      ANC[o]=ANC[o].filter(x=>x!==k); if(!ANC[kind].includes(k))ANC[kind].push(k); saveQ(); renderQ(); $("#aq").focus();};
+  }
+  $("#qbox").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{ANC[b.dataset.kind]=ANC[b.dataset.kind].filter(x=>x!==b.dataset.rm);saveQ();renderQ();});
+  const bk=$("#back"); if(bk) bk.onclick=()=>{step--;saveQ();renderQ();};
+  const nx=$("#next"); if(nx) nx.onclick=()=>{ if(last){quizDone=true;saveQ();renderResult();$("#result").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});} else {step++;saveQ();renderQ();} };
+  const rs=$("#restart"); if(rs) rs.onclick=()=>{step=0;A=[];ANC={like:[],dislike:[]};quizDone=false;saveQ();$("#result").innerHTML="";renderQ();};
 }
-function profileFrom(ans){
+function profileFrom(){
   const v={}; famKeys.forEach(k=>v[k]=0);
-  const ctx={season:"",sillage:2,occ:"daily"};
-  ans.forEach((ai,qi)=>{
-    const o=Q[qi].o[ai]; Object.entries(o[2]).forEach(([k,w])=>v[k]+=w);
-    if(Q[qi].k) ctx[Q[qi].k]=o[3];
+  const kw={}, ctx={budget:null,buy:"con",gender:new Set(),season:[],occ:[],sillage:2};
+  Q.forEach((q,qi)=>{
+    if(q.type==="anchor") return;
+    const picks=q.type==="one"?(A[qi]==null?[]:[A[qi]]):(A[qi]||[]);
+    const w=picks.length?1/Math.sqrt(picks.length):0;
+    picks.forEach(i=>{const o=q.o[i]; if(!o) return;
+      Object.entries(o[2]).forEach(([k,x])=>v[k]+=x*w);
+      (o[3]||[]).forEach(t=>kw[norm(t)]=(kw[norm(t)]||0)+w);
+      if(q.k==="budget") ctx.budget=o[4]; else if(q.k==="buy") ctx.buy=o[4]; else if(q.k==="sillage") ctx.sillage=o[4];
+      else if(q.k==="gender") ctx.gender.add(o[4]); else if(q.k==="season") ctx.season.push(o[4]); else if(q.k==="occ") ctx.occ.push(o[4]);
+    });
   });
-  return {v,ctx};
+  const like=ANC.like.map(byKey).filter(Boolean), dislike=ANC.dislike.map(byKey).filter(Boolean);
+  like.forEach(p=>Object.entries(p.fam).forEach(([k,x])=>v[k]+=x*.8));
+  dislike.forEach(p=>Object.entries(p.fam).forEach(([k,x])=>v[k]-=x*.5));
+  famKeys.forEach(k=>v[k]=Math.round(v[k]*10)/10);
+  return {v,kw,ctx,like,dislike};
 }
-function scorePerfume(p,{v,ctx}){
+function cos(a,b){let d=0,na=0,nb=0;for(const k in a){na+=a[k]*a[k];if(b[k])d+=a[k]*b[k]}for(const k in b)nb+=b[k]*b[k];return na&&nb?d/Math.sqrt(na*nb):0}
+function allowed(p,{ctx}){
+  if(p.disc) return false;
+  if(ctx.gender.size&&!(ctx.gender.has(p.g)||p.g===2)) return false;
+  const av=p.av||"n"; if(!ctx.buy.includes(av)) return false;
+  if(ctx.budget&&p.tw&&(p.tw<ctx.budget[0]*.85||p.tw>ctx.budget[1]*1.15)) return false;
+  return true;
+}
+function scorePerfume(p,pr){
+  const {v,kw,ctx,like,dislike}=pr;
   let s=0,tot=0; const hit=[];
   for(const [k,w] of Object.entries(p.fam)){ s+=v[k]*w; tot+=w; if(v[k]>0&&w>=2) hit.push(k); }
   s=tot?s/Math.sqrt(tot):0;
-  if(ctx.season&&p.s.includes(ctx.season)) s+=1.2;
+  let kh=0; for(const t in kw) if(p.q.includes(t)) kh+=kw[t]; s+=Math.min(kh,3)*.7;
+  ctx.season.forEach(x=>{if(p.s.includes(x)) s+=.5});
   s-=Math.abs(p.si-ctx.sillage)*1.1;
-  if(ctx.occ==="office"&&p.si===3) s-=1.5;
-  if(ctx.occ==="date"&&(p.m.includes("night")||p.m.includes("skin"))) s+=1;
-  if(ctx.occ==="party"&&p.si>=2) s+=.5;
+  if(ctx.occ.includes("office")&&p.si===3) s-=1.2;
+  if(ctx.occ.includes("sport")&&p.si===3) s-=.8;
+  if(ctx.occ.includes("date")&&(p.m.includes("night")||p.m.includes("skin"))) s+=.7;
+  if(ctx.occ.includes("party")&&p.si>=2) s+=.4;
+  if(ctx.budget&&!p.tw) s-=1;
+  let sim=0; like.forEach(a=>sim=Math.max(sim,cos(p.fam,a.fam))); s+=sim*3;
+  let dis=0; dislike.forEach(a=>dis=Math.max(dis,cos(p.fam,a.fam))); s-=dis*3;
   s+=Math.log10((p.v||1500)+1)*1.6;
-  return {s,hit};
+  return {s,hit,sim};
 }
+function rateBar(p){const k=esc(pkey(p)),l=ANC.like.includes(pkey(p)),d=ANC.dislike.includes(pkey(p));
+  return `<div class="rate"><span class="label">試聞之後</span><button class="ghost sm" data-rate="like" data-k="${k}" aria-pressed="${l}">喜歡</button><button class="ghost sm" data-rate="dislike" data-k="${k}" aria-pressed="${d}">不喜歡</button></div>`;}
+const rcard=(p,why)=>card(p,why).replace(/<\/article>$/,rateBar(p)+"</article>");
 function renderResult(){
-  const pr=profileFrom(answers);
+  const pr=profileFrom();
   const pos=famKeys.filter(k=>pr.v[k]>0).sort((a,b)=>pr.v[b]-pr.v[a]);
   const neg=famKeys.filter(k=>pr.v[k]<0);
   const max=Math.max(...pos.map(k=>pr.v[k]),1);
   const top=pos.slice(0,3);
-  const ranked=P.map(p=>({p,...scorePerfume(p,pr)})).sort((a,b)=>b.s-a.s).slice(0,80);
+  const anc=new Set([...ANC.like,...ANC.dislike]);
+  const pool=P.filter(p=>!anc.has(pkey(p))&&allowed(p,pr));
+  const ranked=pool.map(p=>({p,...scorePerfume(p,pr)})).sort((a,b)=>b.s-a.s).slice(0,150);
   const perf=PERFUMERS.map(([n,d,f])=>{let s=0,t=0;for(const[k,w]of Object.entries(f)){s+=pr.v[k]*w;t+=w}return{n,d,f,s:s/Math.sqrt(t)}}).sort((a,b)=>b.s-a.s).slice(0,3);
-  const route=[],usedB=new Set();
-  top.forEach(k=>{const r=ranked.find(x=>x.p.fam[k]>=2&&!usedB.has(x.p.b)&&!route.includes(x));if(r){route.push(r);usedB.add(r.p.b);}});
+  const used=new Set(), usedB=new Set(), pick=(arr,n,cond)=>{const out=[];for(const r of arr){if(out.length>=n)break;if(used.has(r)||usedB.has(r.p.b)||(cond&&!cond(r)))continue;out.push(r);used.add(r);usedB.add(r.p.b);}return out};
+  const tryList=pick(ranked,6);
+  const explore=top[1]?pick(ranked.filter(r=>{const f=Object.entries(r.p.fam).sort((a,b)=>b[1]-a[1])[0];return f&&f[0]!==top[0]}),3):[];
+  const more=pick(ranked,12);
   const sill=["","貼膚低調","一臂距離","存在感強"][pr.ctx.sillage];
   const name=top.length?top.map(k=>FAM[k].n).slice(0,2).join(" × "):"還在摸索";
-  const more=[],seenB={};
-  for(const r of ranked){ if(route.includes(r)) continue; seenB[r.p.b]=(seenB[r.p.b]||0)+1; if(seenB[r.p.b]>2) continue; more.push(r); if(more.length>=12) break; }
+  const scope=[pr.ctx.budget?`預算 ${pr.ctx.budget[1]>1e8?`NT$${pr.ctx.budget[0].toLocaleString()} 以上`:pr.ctx.budget[0]?`NT$${pr.ctx.budget[0].toLocaleString()}–${pr.ctx.budget[1].toLocaleString()}`:`NT$${pr.ctx.budget[1].toLocaleString()} 以下`}`:"",
+    {c:"台灣專櫃或門市",co:"專櫃＋電商選品",con:"不限通路"}[pr.ctx.buy],
+    pr.ctx.gender.size?[...pr.ctx.gender].map(g=>GENDER[g]).join("、")+"（含中性）":""].filter(Boolean).join("・");
+  const why=r=>r.sim>.75?"和你喜歡的香水結構相近":r.hit.length?"契合："+r.hit.map(k=>FAM[k].n).join("、"):"";
   $("#result").innerHTML=`<div class="result">
     <div class="profile">
       <div>
@@ -719,18 +810,27 @@ function renderResult(){
         <p>${top[0]?`主軸是<b>${FAM[top[0]].n}</b>：${FAM[top[0]].d}`:""}${top[1]?` 再帶一點<b>${FAM[top[1]].n}</b>的味道。`:""}偏好<b>${sill}</b>的濃度。</p>
         <p>去專櫃可以直接說：“我想找${top.slice(0,2).map(k=>FAM[k].n).join("、")}調，${pr.ctx.sillage===1?"淡一點、不要太濃":pr.ctx.sillage===3?"持久、有存在感":"日常好用"}的。”</p>
         ${neg.length?`<p class="avoid">先避開：${neg.map(k=>FAM[k].n).join("、")}</p>`:""}
+        <p class="avoid">範圍：${scope}，符合的有 ${pool.length.toLocaleString("en-US")} 支${pr.like.length?`；已用 ${pr.like.length} 支你喜歡的香水校準`:""}</p>
       </div>
       <div class="bars">${pos.slice(0,6).map(k=>`<div class="bar" style="--c:var(--${k})"><span>${FAM[k].n}</span><div class="track"><div class="fill" style="width:${pr.v[k]/max*100}%"></div></div><span class="n">${pr.v[k]}</span></div>`).join("")}</div>
     </div>
-    ${route.length?`<div class="subhead"><h3>先從這幾支開始試</h3><span class="count">每個香調各挑一支、不同品牌</span></div>
-    <div class="grid">${route.map(r=>card(r.p,"代表你的「"+FAM[Object.entries(r.p.fam).sort((a,b)=>b[1]-a[1])[0][0]].n+"」面")).join("")}</div>`:""}
+    <div class="note-box"><b>問卷只能推測方向，真正準的是你的鼻子。</b> 先去專櫃用試香紙聞下面的試香清單，或買 1–2ml 分裝。聞過之後回來按「喜歡」或「不喜歡」，推薦會依照實際聞到的結果重新排序。</div>
+    ${tryList.length?`<div class="subhead"><h3>試香清單</h3><span class="count">6 支、不同品牌，建議一次試 3–4 支</span></div>
+    <div class="grid">${tryList.map(r=>rcard(r.p,why(r))).join("")}</div>`:`<p class="empty">這個範圍內找不到符合的香水，試著放寬預算或通路。</p>`}
+    ${explore.length?`<div class="subhead"><h3>換個方向試試</h3><span class="count">主香調以外的選擇，用來確認你真正的喜好</span></div>
+    <div class="grid">${explore.map(r=>rcard(r.p,"對照組："+FAM[Object.entries(r.p.fam).sort((a,b)=>b[1]-a[1])[0][0]].n)).join("")}</div>`:""}
     <div class="subhead"><h3>可能和你合拍的調香師</h3></div>
     <div class="pgrid">${perf.map(x=>pCard(x.n,x.d,x.f)).join("")}</div>
-    <div class="subhead"><h3>更多匹配的香水</h3><span class="count">按契合度與熱門度排序，同品牌最多兩支</span></div>
-    <div class="grid">${more.map(r=>card(r.p,r.hit.length?"契合："+r.hit.map(k=>FAM[k].n).join("、"):"")).join("")}</div>
+    ${more.length?`<div class="subhead"><h3>更多匹配的香水</h3><span class="count">按契合度與熱門度排序</span></div>
+    <div class="grid">${more.map(r=>rcard(r.p,why(r))).join("")}</div>`:""}
   </div>`;
+  $("#result").querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k,kind=b.dataset.rate,o=kind==="like"?"dislike":"like";
+    if(ANC[kind].includes(k)) ANC[kind]=ANC[kind].filter(x=>x!==k); else {ANC[kind].push(k);ANC[o]=ANC[o].filter(x=>x!==k);}
+    saveQ(); const y=scrollY; renderResult(); scrollTo(0,y);
+    const msg=$("#result .note-box"); if(msg) msg.insertAdjacentHTML("beforeend",' <span class="ok">已依你的回饋重新排序。</span>');
+  });
 }
-
 /* ---------- perfumers ---------- */
 function pCard(n,d,f){
   const works=P.filter(p=>p.p&&p.p.includes(n)).sort((a,b)=>b.v-a.v);
